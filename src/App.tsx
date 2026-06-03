@@ -1137,7 +1137,13 @@ function SecretLetterModal({ onClose }: { onClose: () => void }) {
             <motion.div
               key={i}
               className="absolute text-pink-300/30"
-              style={pos as React.CSSProperties}
+              style={{
+                top: pos.top,
+                bottom: pos.bottom,
+                left: pos.left,
+                right: pos.right,
+              }}
+              initial={{ rotate: pos.rotate }}
               animate={{ rotate: [pos.rotate, pos.rotate + 360] }}
               transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
             >
