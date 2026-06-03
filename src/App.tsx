@@ -16,7 +16,7 @@ import {
 // Ganti nilai di bawah ini dengan URL musik online langsung (direct link .mp3)
 // Contoh: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
 // Atau bisa juga tetap menggunakan file lokal di folder public seperti "/music.mp3"
-export const MUSIC_URL = "/music.mp3";
+export const MUSIC_URL = "/song.mp3";
 
 
 const ROMANTIC_MESSAGES = [
