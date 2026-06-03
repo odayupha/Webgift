@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Heart,
@@ -27,35 +27,35 @@ const POLAROID_PHOTOS = [
   {
     src: "/love5.jpeg",
     caption: "sukak bgt ini cantik bgt",
-    style: { top: "6%", left: "50%", rotate: -6 },
+    rotate: -6,
     floatDuration: 4,
     floatY: 10,
   },
   {
     src: "/love2.jpeg",
     caption: "abis ini banyakin fotonya ya",
-    style: { top: "12%", left: "73%", rotate: 5 },
+    rotate: 5,
     floatDuration: 4.5,
     floatY: 12,
   },
   {
     src: "/love3.jpeg",
     caption: "I like this one",
-    style: { top: "36%", left: "58%", rotate: -3 },
+    rotate: -3,
     floatDuration: 5,
     floatY: 8,
   },
   {
     src: "/love4.jpeg",
     caption: "First di lingkar sayang",
-    style: { top: "58%", left: "74%", rotate: 4 },
+    rotate: 4,
     floatDuration: 3.8,
     floatY: 11,
   },
   {
     src: "/love1.jpeg",
     caption: "Sayang foto kitaa kok dikit doang ternyataa huhuh sedih",
-    style: { top: "62%", left: "48%", rotate: -7 },
+    rotate: -7,
     floatDuration: 4.2,
     floatY: 9,
   },
@@ -149,7 +149,6 @@ function IntroScreen({ onComplete }: { onComplete: () => void }) {
     []
   );
 
-  // Multi-layered blooming petals
   const petalLayers = useMemo(() => {
     const layers: {
       angle: number;
@@ -158,7 +157,6 @@ function IntroScreen({ onComplete }: { onComplete: () => void }) {
       color: string;
       distance: number;
     }[] = [];
-    // Inner layer
     for (let i = 0; i < 6; i++) {
       layers.push({
         angle: i * 60,
@@ -168,7 +166,6 @@ function IntroScreen({ onComplete }: { onComplete: () => void }) {
         distance: 40,
       });
     }
-    // Middle layer
     for (let i = 0; i < 8; i++) {
       layers.push({
         angle: i * 45 + 22,
@@ -178,7 +175,6 @@ function IntroScreen({ onComplete }: { onComplete: () => void }) {
         distance: 65,
       });
     }
-    // Outer layer
     for (let i = 0; i < 10; i++) {
       layers.push({
         angle: i * 36 + 10,
@@ -254,8 +250,7 @@ function IntroScreen({ onComplete }: { onComplete: () => void }) {
             width: 100 + ring * 120,
             height: 100 + ring * 120,
             border: `1px solid rgba(251,113,133,${0.15 - ring * 0.02})`,
-            boxShadow: `0 0 ${20 + ring * 10}px rgba(251,113,133,${0.08 - ring * 0.01
-              })`,
+            boxShadow: `0 0 ${20 + ring * 10}px rgba(251,113,133,${0.08 - ring * 0.01})`,
           }}
           initial={{ scale: 0, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
@@ -295,12 +290,10 @@ function IntroScreen({ onComplete }: { onComplete: () => void }) {
 
       {/* ── The Blooming Flower ── */}
       <div className="relative" style={{ width: 240, height: 240 }}>
-        {/* Petals */}
         {petalLayers.map((petal, i) => (
           <IntroPetal key={i} {...petal} />
         ))}
 
-        {/* Center glow */}
         <motion.div
           className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full"
           style={{
@@ -316,7 +309,6 @@ function IntroScreen({ onComplete }: { onComplete: () => void }) {
           transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
         />
 
-        {/* Heart in center */}
         <motion.div
           className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10"
           initial={{ scale: 0, rotate: -30 }}
@@ -330,7 +322,6 @@ function IntroScreen({ onComplete }: { onComplete: () => void }) {
           <Heart size={26} className="text-rose-600 fill-rose-600" />
         </motion.div>
 
-        {/* Outer spinning ring of small flowers */}
         <motion.div
           className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
           style={{ width: 280, height: 280 }}
@@ -361,7 +352,7 @@ function IntroScreen({ onComplete }: { onComplete: () => void }) {
         initial={{ opacity: 0, y: 40, scale: 0.8 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ delay: 1.2, duration: 1, ease: "easeOut" }}
-        className="mt-10 text-5xl md:text-7xl text-rose-600 tracking-wide z-10"
+        className="mt-10 text-4xl sm:text-5xl md:text-7xl text-rose-600 tracking-wide z-10"
         style={{ fontFamily: "'Playfair Display', serif" }}
       >
         Hai Love{" "}
@@ -378,14 +369,14 @@ function IntroScreen({ onComplete }: { onComplete: () => void }) {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.6, duration: 0.8 }}
-        className="mt-4 text-pink-400 z-10"
-        style={{ fontFamily: "'Caveat', cursive", fontSize: "1.7rem" }}
+        className="mt-4 text-pink-400 z-10 text-center px-6"
+        style={{ fontFamily: "'Caveat', cursive", fontSize: "1.5rem" }}
       >
         I made something special just for you...
       </motion.p>
 
       {/* Progress bar */}
-      <motion.div className="absolute bottom-14 w-56 h-1.5 rounded-full bg-pink-200/40 overflow-hidden z-10">
+      <motion.div className="absolute bottom-14 w-48 sm:w-56 h-1.5 rounded-full bg-pink-200/40 overflow-hidden z-10">
         <motion.div
           className="h-full rounded-full"
           style={{
@@ -435,8 +426,7 @@ function LightRays() {
           style={{
             width: "50vw",
             height: "140vh",
-            background: `linear-gradient(${110 + i * 45
-              }deg, transparent, rgba(251,207,232,0.1), transparent)`,
+            background: `linear-gradient(${110 + i * 45}deg, transparent, rgba(251,207,232,0.1), transparent)`,
             top: "-20%",
             left: `${5 + i * 30}%`,
             transformOrigin: "top center",
@@ -460,7 +450,7 @@ function LightRays() {
 function CherryBlossoms() {
   const blossoms = useMemo(
     () =>
-      Array.from({ length: 20 }, (_, i) => ({
+      Array.from({ length: 16 }, (_, i) => ({
         id: i,
         x: Math.random() * 100,
         size: 12 + Math.random() * 16,
@@ -519,17 +509,15 @@ function CornerFlowers() {
     { top: "3%", right: "3%" },
     { bottom: "3%", left: "3%" },
     { bottom: "3%", right: "3%" },
-    { top: "15%", right: "8%" },
-    { bottom: "15%", left: "6%" },
   ];
-  const sizes = [52, 46, 42, 50, 36, 38];
+  const sizes = [48, 42, 38, 46];
 
   return (
     <>
       {positions.map((pos, i) => (
         <motion.div
           key={i}
-          className="fixed z-[3] pointer-events-none"
+          className="fixed z-[3] pointer-events-none hidden sm:block"
           style={{ ...pos, color: `rgba(244,114,182,${0.2 + (i % 3) * 0.08})` }}
           animate={{ rotate: 360 }}
           transition={{ duration: 25 + i * 6, repeat: Infinity, ease: "linear" }}
@@ -541,11 +529,10 @@ function CornerFlowers() {
   );
 }
 
-/* Washi Tape Strips */
+/* Washi Tape Strips — hidden on mobile */
 function WashiTapes() {
   return (
-    <>
-      {/* Top left diagonal tape */}
+    <div className="hidden md:block">
       <div
         className="fixed z-[4] pointer-events-none"
         style={{
@@ -560,7 +547,6 @@ function WashiTapes() {
           boxShadow: "0 1px 3px rgba(0,0,0,0.05)",
         }}
       />
-      {/* Bottom right tape */}
       <div
         className="fixed z-[4] pointer-events-none"
         style={{
@@ -575,21 +561,7 @@ function WashiTapes() {
           boxShadow: "0 1px 3px rgba(0,0,0,0.04)",
         }}
       />
-      {/* Mid-left tape */}
-      <div
-        className="fixed z-[4] pointer-events-none"
-        style={{
-          top: "45%",
-          left: "1%",
-          width: 90,
-          height: 18,
-          background:
-            "repeating-linear-gradient(90deg, rgba(253,164,175,0.18) 0px, rgba(253,164,175,0.18) 5px, rgba(253,164,175,0.08) 5px, rgba(253,164,175,0.08) 10px)",
-          transform: "rotate(-90deg)",
-          borderRadius: 2,
-        }}
-      />
-    </>
+    </div>
   );
 }
 
@@ -598,15 +570,11 @@ function ScatteredDoodles() {
   const items = useMemo(
     () => [
       { type: "heart", top: "12%", left: "38%", size: 16, delay: 0 },
-      { type: "heart", top: "25%", left: "46%", size: 12, delay: 0.5 },
       { type: "star", top: "18%", right: "18%", size: 14, delay: 1 },
       { type: "heart", top: "72%", left: "42%", size: 14, delay: 1.5 },
       { type: "star", top: "65%", left: "35%", size: 10, delay: 0.8 },
       { type: "heart", top: "80%", right: "25%", size: 16, delay: 0.3 },
-      { type: "star", top: "8%", left: "65%", size: 12, delay: 1.2 },
       { type: "heart", top: "88%", left: "20%", size: 10, delay: 0.7 },
-      { type: "star", bottom: "22%", right: "6%", size: 11, delay: 1.8 },
-      { type: "heart", top: "50%", left: "30%", size: 10, delay: 2 },
     ],
     []
   );
@@ -616,7 +584,6 @@ function ScatteredDoodles() {
       {items.map((item, i) => {
         const posStyle: React.CSSProperties = {};
         if (item.top) posStyle.top = item.top;
-        if (item.bottom) posStyle.bottom = item.bottom;
         if (item.left) posStyle.left = item.left;
         if (item.right) posStyle.right = item.right;
 
@@ -657,7 +624,7 @@ function ScatteredDoodles() {
   );
 }
 
-/* String Lights across top */
+/* String Lights across top — hidden on small mobile */
 function StringLights() {
   const bulbs = useMemo(
     () =>
@@ -671,8 +638,7 @@ function StringLights() {
   );
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-[4] pointer-events-none">
-      {/* The wire */}
+    <div className="fixed top-0 left-0 right-0 z-[4] pointer-events-none hidden sm:block">
       <svg
         className="w-full"
         height="60"
@@ -687,7 +653,6 @@ function StringLights() {
           fill="none"
         />
       </svg>
-      {/* The bulbs */}
       {bulbs.map((b) => (
         <motion.div
           key={b.id}
@@ -720,10 +685,10 @@ function StringLights() {
   );
 }
 
-/* Notebook Lines pattern (left panel bg) */
+/* Notebook Lines pattern */
 function NotebookLines() {
   return (
-    <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-[0.06]">
+    <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-[0.06] hidden md:block">
       {Array.from({ length: 20 }).map((_, i) => (
         <div
           key={i}
@@ -735,7 +700,6 @@ function NotebookLines() {
           }}
         />
       ))}
-      {/* Red margin line */}
       <div
         className="absolute top-0 bottom-0"
         style={{
@@ -755,7 +719,7 @@ function NotebookLines() {
 function MadeWithLove() {
   return (
     <div
-      className="fixed bottom-5 left-6 z-[50] flex items-center gap-2 text-pink-400/70"
+      className="fixed bottom-4 left-4 sm:bottom-5 sm:left-6 z-[50] flex items-center gap-2 text-pink-400/70"
       style={{ fontFamily: "'Caveat', cursive", fontSize: "1.1rem" }}
     >
       Made with
@@ -782,7 +746,7 @@ function RotatingText() {
   }, []);
 
   return (
-    <div className="h-20 relative">
+    <div className="h-16 sm:h-20 relative">
       <AnimatePresence mode="wait">
         <motion.p
           key={index}
@@ -791,7 +755,7 @@ function RotatingText() {
           exit={{ opacity: 0, y: -24, filter: "blur(8px)" }}
           transition={{ duration: 0.9, ease: "easeInOut" }}
           className="text-rose-400/80 absolute leading-relaxed"
-          style={{ fontFamily: "'Caveat', cursive", fontSize: "1.6rem" }}
+          style={{ fontFamily: "'Caveat', cursive", fontSize: "clamp(1.1rem, 3vw, 1.6rem)" }}
         >
           "{ROMANTIC_MESSAGES[index]}"
         </motion.p>
@@ -801,7 +765,7 @@ function RotatingText() {
 }
 
 /* ═══════════════════════════════════════════════
-   POLAROID GALLERY — Large & Scattered
+   POLAROID GALLERY — Responsive Grid + Scattered Desktop
    ═══════════════════════════════════════════════ */
 
 function PolaroidCard({
@@ -815,55 +779,52 @@ function PolaroidCard({
 
   return (
     <motion.div
-      className="absolute cursor-pointer"
+      className="cursor-pointer"
       style={{
-        ...photo.style,
         zIndex: hovered ? 50 : 10 + index,
-        rotate: undefined,
       }}
       initial={{
         opacity: 0,
         scale: 0.3,
-        rotate: photo.style.rotate,
+        rotate: photo.rotate,
       }}
       animate={{
         opacity: 1,
-        scale: hovered ? 1.18 : 1,
-        rotate: hovered ? 0 : photo.style.rotate,
-        y: hovered ? -20 : [0, -photo.floatY, 0],
+        scale: hovered ? 1.1 : 1,
+        rotate: hovered ? 0 : photo.rotate,
+        y: hovered ? -15 : [0, -photo.floatY, 0],
       }}
       transition={
         hovered
           ? { type: "spring", stiffness: 280, damping: 18 }
           : {
-            y: {
-              duration: photo.floatDuration,
-              repeat: Infinity,
-              ease: "easeInOut",
-            },
-            opacity: { duration: 0.7, delay: 0.3 + index * 0.15 },
-            scale: { duration: 0.7, delay: 0.3 + index * 0.15 },
-          }
+              y: {
+                duration: photo.floatDuration,
+                repeat: Infinity,
+                ease: "easeInOut",
+              },
+              opacity: { duration: 0.7, delay: 0.3 + index * 0.15 },
+              scale: { duration: 0.7, delay: 0.3 + index * 0.15 },
+            }
       }
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      whileTap={{ scale: 1.08 }}
+      whileTap={{ scale: 1.05 }}
     >
       <div
-        className="bg-white p-2.5 pb-12 rounded-sm transition-shadow duration-500"
+        className="bg-white p-1.5 sm:p-2.5 pb-8 sm:pb-12 rounded-sm transition-shadow duration-500"
         style={{
           boxShadow: hovered
             ? "0 30px 60px rgba(190,18,60,0.28), 0 15px 30px rgba(0,0,0,0.12)"
             : "0 6px 20px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06)",
-          width: 200,
         }}
       >
         {/* Tape on top */}
         <div
-          className="absolute -top-2.5 left-1/2 -translate-x-1/2 z-10"
+          className="absolute -top-2 sm:-top-2.5 left-1/2 -translate-x-1/2 z-10"
           style={{
-            width: 50,
-            height: 16,
+            width: 40,
+            height: 14,
             background: "rgba(253,224,71,0.3)",
             transform: `translateX(-50%) rotate(${(index % 2 === 0 ? -3 : 3)}deg)`,
             borderRadius: 1,
@@ -872,7 +833,7 @@ function PolaroidCard({
         <img
           src={photo.src}
           alt={photo.caption}
-          className="w-full h-48 object-cover rounded-[2px]"
+          className="w-full h-28 sm:h-36 md:h-48 object-cover rounded-[2px]"
           loading="lazy"
           onError={(e) => {
             (e.target as HTMLImageElement).src =
@@ -880,8 +841,8 @@ function PolaroidCard({
           }}
         />
         <p
-          className="text-center text-gray-500 mt-3 text-base"
-          style={{ fontFamily: "'Caveat', cursive", fontSize: "1.1rem" }}
+          className="text-center text-gray-500 mt-2 sm:mt-3 text-xs sm:text-base line-clamp-2"
+          style={{ fontFamily: "'Caveat', cursive", fontSize: "clamp(0.75rem, 2vw, 1.1rem)" }}
         >
           {photo.caption}
         </p>
@@ -899,8 +860,8 @@ function EnvelopeSparkles() {
     () =>
       Array.from({ length: 10 }, (_, i) => ({
         id: i,
-        x: (Math.random() - 0.5) * 160,
-        y: (Math.random() - 0.5) * 100,
+        x: (Math.random() - 0.5) * 140,
+        y: (Math.random() - 0.5) * 90,
         delay: Math.random() * 2.5,
         duration: 1.5 + Math.random() * 1.5,
         size: 10 + Math.random() * 12,
@@ -938,13 +899,13 @@ function EnvelopeSparkles() {
 
 function EnvelopeButton({ onClick }: { onClick: () => void }) {
   return (
-    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[60] flex flex-col items-center">
+    <div className="fixed bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-[60] flex flex-col items-center">
       {/* Glow */}
       <motion.div
         className="absolute rounded-full"
         style={{
-          width: 180,
-          height: 100,
+          width: 160,
+          height: 90,
           background:
             "radial-gradient(ellipse, rgba(251,113,133,0.3) 0%, transparent 70%)",
         }}
@@ -960,7 +921,7 @@ function EnvelopeButton({ onClick }: { onClick: () => void }) {
         className="relative cursor-pointer group"
         whileHover={{ scale: 1.12, y: -6 }}
         whileTap={{ scale: 0.93 }}
-        style={{ width: 110, height: 78 }}
+        style={{ width: 90, height: 64 }}
       >
         {/* Envelope Body */}
         <div
@@ -1000,9 +961,9 @@ function EnvelopeButton({ onClick }: { onClick: () => void }) {
         <motion.div
           className="absolute left-1/2 -translate-x-1/2 rounded-t-sm"
           style={{
-            width: 65,
-            height: 22,
-            top: -10,
+            width: 55,
+            height: 18,
+            top: -8,
             background: "linear-gradient(180deg, #fffbeb 0%, #fef3c7 100%)",
             borderTop: "1px solid #fde68a",
             borderLeft: "1px solid #fde68a",
@@ -1012,15 +973,15 @@ function EnvelopeButton({ onClick }: { onClick: () => void }) {
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
         >
           <div className="flex flex-col items-center justify-center h-full gap-[2px] pt-1.5">
-            <div className="w-9 h-[1.5px] bg-pink-300/50 rounded" />
-            <div className="w-7 h-[1.5px] bg-pink-300/40 rounded" />
+            <div className="w-8 h-[1.5px] bg-pink-300/50 rounded" />
+            <div className="w-6 h-[1.5px] bg-pink-300/40 rounded" />
           </div>
         </motion.div>
 
         {/* Wax Seal */}
-        <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2">
+        <div className="absolute bottom-2 left-1/2 -translate-x-1/2">
           <motion.div
-            className="w-8 h-8 rounded-full flex items-center justify-center"
+            className="w-7 h-7 rounded-full flex items-center justify-center"
             style={{
               background:
                 "radial-gradient(circle at 35% 35%, #fb7185, #e11d48 60%, #9f1239 100%)",
@@ -1030,15 +991,15 @@ function EnvelopeButton({ onClick }: { onClick: () => void }) {
             animate={{ scale: [1, 1.08, 1] }}
             transition={{ duration: 1.5, repeat: Infinity }}
           >
-            <Heart size={13} className="text-white fill-white" />
+            <Heart size={12} className="text-white fill-white" />
           </motion.div>
         </div>
       </motion.button>
 
       {/* "Open Me" text */}
       <motion.p
-        className="mt-4 text-rose-400/80"
-        style={{ fontFamily: "'Caveat', cursive", fontSize: "1.3rem" }}
+        className="mt-3 text-rose-400/80"
+        style={{ fontFamily: "'Caveat', cursive", fontSize: "1.2rem" }}
         animate={{ opacity: [0.5, 1, 0.5] }}
         transition={{ duration: 2, repeat: Infinity }}
       >
@@ -1055,7 +1016,7 @@ function EnvelopeButton({ onClick }: { onClick: () => void }) {
 function FloatingHearts() {
   const hearts = useMemo(
     () =>
-      Array.from({ length: 30 }, (_, i) => ({
+      Array.from({ length: 25 }, (_, i) => ({
         id: i,
         x: Math.random() * 100,
         size: 12 + Math.random() * 20,
@@ -1095,7 +1056,7 @@ function FloatingHearts() {
 function SecretLetterModal({ onClose }: { onClose: () => void }) {
   return (
     <motion.div
-      className="fixed inset-0 z-[200] flex items-center justify-center"
+      className="fixed inset-0 z-[200] flex items-center justify-center p-4"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -1111,14 +1072,14 @@ function SecretLetterModal({ onClose }: { onClose: () => void }) {
 
       {/* Letter Card */}
       <motion.div
-        className="relative z-10 mx-4 max-w-lg w-full"
+        className="relative z-10 max-w-lg w-full max-h-[85vh] overflow-y-auto"
         initial={{ scale: 0.6, y: 80, opacity: 0, rotate: -5 }}
         animate={{ scale: 1, y: 0, opacity: 1, rotate: 0 }}
         exit={{ scale: 0.7, y: 50, opacity: 0 }}
         transition={{ type: "spring", stiffness: 240, damping: 20 }}
       >
         <div
-          className="relative rounded-2xl p-8 md:p-10 overflow-hidden"
+          className="relative rounded-2xl p-6 sm:p-8 md:p-10 overflow-hidden"
           style={{
             background:
               "linear-gradient(145deg, #fffbeb 0%, #fef3c7 30%, #fff7ed 60%, #fffbeb 100%)",
@@ -1147,34 +1108,34 @@ function SecretLetterModal({ onClose }: { onClose: () => void }) {
               animate={{ rotate: [pos.rotate, pos.rotate + 360] }}
               transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
             >
-              <Flower2 size={32} strokeWidth={1} />
+              <Flower2 size={28} strokeWidth={1} />
             </motion.div>
           ))}
 
           {/* Close Button */}
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-rose-100/80 hover:bg-rose-200 flex items-center justify-center transition-colors cursor-pointer"
+            className="absolute top-3 right-3 sm:top-4 sm:right-4 z-10 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-rose-100/80 hover:bg-rose-200 flex items-center justify-center transition-colors cursor-pointer"
           >
-            <X size={18} className="text-rose-500" />
+            <X size={16} className="text-rose-500" />
           </button>
 
           {/* Header */}
-          <div className="text-center mb-6">
+          <div className="text-center mb-4 sm:mb-6">
             <motion.div
               animate={{ scale: [1, 1.2, 1] }}
               transition={{ duration: 1.5, repeat: Infinity }}
-              className="inline-block mb-3"
+              className="inline-block mb-2 sm:mb-3"
             >
-              <Heart size={30} className="text-rose-400 fill-rose-400 mx-auto" />
+              <Heart size={26} className="text-rose-400 fill-rose-400 mx-auto" />
             </motion.div>
             <h2
-              className="text-2xl md:text-3xl text-rose-600"
+              className="text-xl sm:text-2xl md:text-3xl text-rose-600"
               style={{ fontFamily: "'Playfair Display', serif" }}
             >
               My Secret Letter
             </h2>
-            <div className="mt-3 w-28 h-[1px] bg-gradient-to-r from-transparent via-rose-300 to-transparent mx-auto" />
+            <div className="mt-2 sm:mt-3 w-24 sm:w-28 h-[1px] bg-gradient-to-r from-transparent via-rose-300 to-transparent mx-auto" />
           </div>
 
           {/* Letter Content */}
@@ -1182,14 +1143,14 @@ function SecretLetterModal({ onClose }: { onClose: () => void }) {
             className="text-gray-600 leading-relaxed whitespace-pre-line text-center"
             style={{
               fontFamily: "'Caveat', cursive",
-              fontSize: "1.3rem",
+              fontSize: "clamp(1rem, 3vw, 1.3rem)",
               lineHeight: "1.9",
             }}
           >
             {SECRET_LETTER}
           </div>
 
-          <div className="mt-6 flex justify-center gap-3">
+          <div className="mt-4 sm:mt-6 flex justify-center gap-3">
             {[0, 1, 2, 3, 4].map((i) => (
               <motion.div
                 key={i}
@@ -1207,7 +1168,7 @@ function SecretLetterModal({ onClose }: { onClose: () => void }) {
 }
 
 /* ═══════════════════════════════════════════════
-   MUSIC BUTTON
+   MUSIC BUTTON — Plays "Can't Help Falling in Love"
    ═══════════════════════════════════════════════ */
 
 function MusicNoteParticles({ active }: { active: boolean }) {
@@ -1253,14 +1214,42 @@ function MusicNoteParticles({ active }: { active: boolean }) {
 
 function MusicButton() {
   const [active, setActive] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    // Create audio element once
+    const audio = new Audio("/music.mp3");
+    audio.loop = true;
+    audio.volume = 0.5;
+    audioRef.current = audio;
+
+    return () => {
+      audio.pause();
+      audio.src = "";
+    };
+  }, []);
+
+  const toggleMusic = useCallback(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    if (active) {
+      audio.pause();
+    } else {
+      audio.play().catch(() => {
+        // Autoplay blocked, user must interact again
+      });
+    }
+    setActive(!active);
+  }, [active]);
 
   return (
-    <div className="fixed bottom-5 right-6 z-[60]">
+    <div className="fixed bottom-4 right-4 sm:bottom-5 sm:right-6 z-[60]">
       <div className="relative">
         <MusicNoteParticles active={active} />
         <motion.button
-          onClick={() => setActive(!active)}
-          className="w-12 h-12 rounded-full flex items-center justify-center cursor-pointer"
+          onClick={toggleMusic}
+          className="w-11 h-11 sm:w-12 sm:h-12 rounded-full flex items-center justify-center cursor-pointer"
           style={{
             background: active
               ? "linear-gradient(135deg, #fda4af, #fb7185)"
@@ -1274,29 +1263,50 @@ function MusicButton() {
           animate={
             active
               ? {
-                boxShadow: [
-                  "0 4px 20px rgba(251,113,133,0.2)",
-                  "0 4px 35px rgba(251,113,133,0.55)",
-                  "0 4px 20px rgba(251,113,133,0.2)",
-                ],
-              }
+                  boxShadow: [
+                    "0 4px 20px rgba(251,113,133,0.2)",
+                    "0 4px 35px rgba(251,113,133,0.55)",
+                    "0 4px 20px rgba(251,113,133,0.2)",
+                  ],
+                }
               : {}
           }
           transition={{ duration: 1.5, repeat: Infinity }}
         >
           {active ? (
-            <Volume2 size={20} className="text-white" />
+            <Volume2 size={18} className="text-white" />
           ) : (
-            <VolumeX size={20} className="text-pink-400" />
+            <VolumeX size={18} className="text-pink-400" />
           )}
         </motion.button>
+        {/* Song title tooltip */}
+        {active && (
+          <motion.div
+            initial={{ opacity: 0, x: 10 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="absolute right-full mr-3 top-1/2 -translate-y-1/2 whitespace-nowrap hidden sm:block"
+          >
+            <div
+              className="px-3 py-1.5 rounded-full text-xs text-rose-500"
+              style={{
+                background: "rgba(255,241,242,0.9)",
+                backdropFilter: "blur(8px)",
+                border: "1px solid rgba(253,164,175,0.3)",
+                fontFamily: "'Caveat', cursive",
+                fontSize: "0.85rem",
+              }}
+            >
+              ♪ Can&apos;t Help Falling in Love
+            </div>
+          </motion.div>
+        )}
       </div>
     </div>
   );
 }
 
 /* ═══════════════════════════════════════════════════
-   ██   MAIN APP
+   ██   MAIN APP — Fully Responsive
    ═══════════════════════════════════════════════════ */
 
 export default function App() {
@@ -1329,7 +1339,7 @@ export default function App() {
       <WashiTapes />
       <ScatteredDoodles />
 
-      {/* ── Scrapbook Paper Texture Overlay ── */}
+      {/* ── Paper Texture Overlay ── */}
       <div
         className="fixed inset-0 z-[1] pointer-events-none"
         style={{
@@ -1340,23 +1350,93 @@ export default function App() {
 
       {/* ── Top Washi Tape Strip ── */}
       <div
-        className="absolute top-0 left-0 right-0 h-3 z-[5]"
+        className="absolute top-0 left-0 right-0 h-2 sm:h-3 z-[5]"
         style={{
           background:
             "repeating-linear-gradient(90deg, rgba(253,164,175,0.25) 0px, rgba(253,164,175,0.25) 16px, rgba(251,207,232,0.15) 16px, rgba(251,207,232,0.15) 32px)",
         }}
       />
 
-      {/* ── MAIN CONTENT ── */}
+      {/* ══════════════════════════════════════════
+          MAIN CONTENT — Responsive Layout
+          ══════════════════════════════════════════ */}
       <motion.div
-        className="relative z-10 h-full"
+        className="relative z-10 h-full overflow-y-auto sm:overflow-hidden"
         initial={{ opacity: 0 }}
         animate={{ opacity: showIntro ? 0 : 1 }}
         transition={{ duration: 1.2, delay: 0.2 }}
       >
-        {/* ═══ LEFT PANEL — Text ═══ */}
-        <div className="absolute left-0 top-0 bottom-0 w-[46%] flex items-center z-20">
-          <div className="pl-10 md:pl-16 lg:pl-20 max-w-xl relative">
+        {/* ─── MOBILE LAYOUT (vertical scroll) ─── */}
+        <div className="flex flex-col sm:hidden min-h-screen pb-32 pt-8 px-5">
+          {/* Mobile: Title Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: showIntro ? 0 : 1, y: showIntro ? 30 : 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="mb-6"
+          >
+            <div
+              className="px-3 py-1 rounded-sm inline-block mb-3"
+              style={{
+                background: "rgba(253,164,175,0.15)",
+                border: "1px dashed rgba(253,164,175,0.4)",
+              }}
+            >
+              <p
+                className="text-pink-400/80 tracking-[0.2em] uppercase"
+                style={{ fontFamily: "'Caveat', cursive", fontSize: "0.85rem" }}
+              >
+                ✦ A Love Scrapbook ✦
+              </p>
+            </div>
+
+            <h1
+              className="text-5xl text-rose-700 leading-[1.1]"
+              style={{ fontFamily: "'Playfair Display', serif" }}
+            >
+              Our
+            </h1>
+            <h1
+              className="text-5xl italic text-rose-500 mb-4 leading-[1.1]"
+              style={{ fontFamily: "'Playfair Display', serif" }}
+            >
+              Memories
+            </h1>
+
+            {/* Decorative line */}
+            <div className="flex items-center gap-3 mb-4 max-w-[200px]">
+              <div className="h-[1px] flex-1 bg-gradient-to-r from-rose-300/70 to-transparent" />
+              <motion.div
+                animate={{ scale: [1, 1.25, 1] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                <Heart size={14} className="text-rose-400 fill-rose-400" />
+              </motion.div>
+              <div className="h-[1px] flex-1 bg-gradient-to-l from-rose-300/70 to-transparent" />
+            </div>
+
+            <RotatingText />
+          </motion.div>
+
+          {/* Mobile: Photo Grid */}
+          <motion.div
+            className="grid grid-cols-2 gap-3 mb-8"
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: showIntro ? 0 : 1, y: showIntro ? 40 : 0 }}
+            transition={{ duration: 0.8, delay: 0.7 }}
+          >
+            {POLAROID_PHOTOS.map((photo, i) => (
+              <div key={i} className={i === POLAROID_PHOTOS.length - 1 && POLAROID_PHOTOS.length % 2 !== 0 ? "col-span-2 max-w-[60%] mx-auto" : ""}>
+                <PolaroidCard photo={photo} index={i} />
+              </div>
+            ))}
+          </motion.div>
+        </div>
+
+        {/* ─── DESKTOP LAYOUT (side by side) ─── */}
+        {/* Left Panel — Text */}
+        <div className="hidden sm:flex absolute left-0 top-0 bottom-0 w-[44%] lg:w-[42%] items-center z-20">
+          <div className="pl-8 md:pl-14 lg:pl-20 max-w-xl relative">
             <NotebookLines />
 
             {/* Scrapbook label */}
@@ -1391,7 +1471,7 @@ export default function App() {
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: showIntro ? 0 : 1, y: showIntro ? 50 : 0 }}
               transition={{ duration: 1, delay: 0.6 }}
-              className="text-6xl md:text-7xl lg:text-8xl text-rose-700 mb-2 leading-[1.1]"
+              className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl text-rose-700 mb-2 leading-[1.1]"
               style={{ fontFamily: "'Playfair Display', serif" }}
             >
               Our
@@ -1400,7 +1480,7 @@ export default function App() {
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: showIntro ? 0 : 1, y: showIntro ? 50 : 0 }}
               transition={{ duration: 1, delay: 0.75 }}
-              className="text-6xl md:text-7xl lg:text-8xl italic text-rose-500 mb-6 leading-[1.1]"
+              className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl italic text-rose-500 mb-6 leading-[1.1]"
               style={{ fontFamily: "'Playfair Display', serif" }}
             >
               Memories
@@ -1470,7 +1550,7 @@ export default function App() {
 
             {/* Doodle arrow pointing right */}
             <motion.div
-              className="mt-8 text-pink-200/40"
+              className="mt-8 text-pink-200/40 hidden lg:block"
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: showIntro ? 0 : 1, x: showIntro ? -20 : 0 }}
               transition={{ delay: 1.8, duration: 0.6 }}
@@ -1497,14 +1577,14 @@ export default function App() {
           </div>
         </div>
 
-        {/* ═══ RIGHT PANEL — Polaroid Gallery ═══ */}
+        {/* Right Panel — Polaroid Gallery (Desktop) */}
         <motion.div
-          className="absolute right-0 top-0 bottom-0 w-[54%] z-10"
+          className="hidden sm:block absolute right-0 top-0 bottom-0 w-[56%] lg:w-[58%] z-10"
           initial={{ opacity: 0 }}
           animate={{ opacity: showIntro ? 0 : 1 }}
           transition={{ duration: 1, delay: 0.5 }}
         >
-          {/* Subtle background for the gallery area */}
+          {/* Subtle background */}
           <div
             className="absolute inset-0 pointer-events-none"
             style={{
@@ -1512,14 +1592,34 @@ export default function App() {
                 "radial-gradient(ellipse at 60% 50%, rgba(253,164,175,0.08) 0%, transparent 70%)",
             }}
           />
-          {POLAROID_PHOTOS.map((photo, i) => (
-            <PolaroidCard key={i} photo={photo} index={i} />
-          ))}
+
+          {/* Scattered polaroids with absolute positioning for desktop */}
+          {POLAROID_PHOTOS.map((photo, i) => {
+            // Pre-computed scattered positions for desktop (within the right panel)
+            const desktopPositions = [
+              { top: "6%", left: "8%", width: 185 },
+              { top: "5%", left: "52%", width: 175 },
+              { top: "36%", left: "28%", width: 190 },
+              { top: "38%", left: "65%", width: 170 },
+              { top: "66%", left: "12%", width: 180 },
+            ];
+            const pos = desktopPositions[i] || desktopPositions[0];
+
+            return (
+              <div
+                key={i}
+                className="absolute"
+                style={{ top: pos.top, left: pos.left, width: pos.width }}
+              >
+                <PolaroidCard photo={photo} index={i} />
+              </div>
+            );
+          })}
         </motion.div>
 
-        {/* ═══ Center divider — vertical dashed line ═══ */}
+        {/* Center divider — visible only on desktop */}
         <div
-          className="absolute left-[46%] top-[8%] bottom-[8%] w-[1px] z-[5] pointer-events-none"
+          className="hidden sm:block absolute left-[44%] lg:left-[42%] top-[8%] bottom-[8%] w-[1px] z-[5] pointer-events-none"
           style={{
             background:
               "repeating-linear-gradient(180deg, rgba(253,164,175,0.2) 0px, rgba(253,164,175,0.2) 6px, transparent 6px, transparent 12px)",
@@ -1569,7 +1669,7 @@ export default function App() {
 
       {/* ── Bottom washi tape ── */}
       <div
-        className="absolute bottom-0 left-0 right-0 h-3 z-[5]"
+        className="absolute bottom-0 left-0 right-0 h-2 sm:h-3 z-[5]"
         style={{
           background:
             "repeating-linear-gradient(90deg, rgba(251,207,232,0.2) 0px, rgba(251,207,232,0.2) 16px, rgba(253,164,175,0.12) 16px, rgba(253,164,175,0.12) 32px)",
