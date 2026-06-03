@@ -13,6 +13,12 @@ import {
 
 /* ───────────────────── constants ───────────────────── */
 
+// Ganti nilai di bawah ini dengan URL musik online langsung (direct link .mp3)
+// Contoh: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+// Atau bisa juga tetap menggunakan file lokal di folder public seperti "/music.mp3"
+export const MUSIC_URL = "/music.mp3";
+
+
 const ROMANTIC_MESSAGES = [
   "Thank you for choosing me...",
   "Every moment with you is a treasure I hold close.",
@@ -1217,8 +1223,8 @@ function MusicButton() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    // Create audio element once
-    const audio = new Audio("/music.mp3");
+    // Create audio element once using the global MUSIC_URL constant
+    const audio = new Audio(MUSIC_URL);
     audio.loop = true;
     audio.volume = 0.5;
     audioRef.current = audio;
